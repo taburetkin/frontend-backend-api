@@ -1,0 +1,8 @@
+{
+  "name": "frontend-backend-api",
+  "version": "0.0.1",
+  "description": "frontedn backend synchronization api",
+  "main": "index.js",
+  "author": "dimtabu<dima.taburetkin@gmail.com>",
+  "license": "MIT"
+}
