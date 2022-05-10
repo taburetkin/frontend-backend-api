@@ -1,4 +1,4 @@
-import { BaseOptionsNormalizer } from "./baseOptionsNormalizer";
+import { BaseOptionsNormalizer } from "./baseOptionsNormalizer.js";
 
 function executer(arr, index, arg, options, context) {
     let callback = arr[index];

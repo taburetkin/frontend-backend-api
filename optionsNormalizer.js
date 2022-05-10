@@ -1,7 +1,7 @@
-import { BaseOptionsNormalizer } from "./baseOptionsNormalizer";
-import { BodyOptionsNormalizer } from "./bodyOptionsNormalizer";
-import { withBodyArguments, withoutBodyArguments } from "./normalizeUtils";
-import { isAbsoluteUrl } from "./utils";
+import { BaseOptionsNormalizer } from "./baseOptionsNormalizer.js";
+import { BodyOptionsNormalizer } from "./bodyOptionsNormalizer.js";
+import { withBodyArguments, withoutBodyArguments } from "./normalizeUtils.js";
+import { isAbsoluteUrl } from "./utils.js";
 
 
 const methodsMapping = {

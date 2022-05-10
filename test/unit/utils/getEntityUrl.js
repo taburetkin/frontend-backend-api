@@ -1,0 +1,5 @@
+describe('utils', () => {
+    describe('getEntityUrl', () => {
+
+    });
+});

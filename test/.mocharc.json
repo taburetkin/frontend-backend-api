@@ -1,0 +1,9 @@
+{
+	"checkLeaks": true,
+	"file": "./test/mocha.setup.js",
+    "require": ["module-alias/register", "@babel/register"],
+	"recursive": true,
+	"reporter": "dot",
+	"spec": "./test/unit/",
+	"ui": "bdd"
+}

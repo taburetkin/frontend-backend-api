@@ -1,4 +1,4 @@
-import { BackendApi } from "./BackendApi";
+import { BackendApi } from "./BackendApi.js";
 
 export {
 

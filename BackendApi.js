@@ -1,7 +1,10 @@
-import { defaultBackboneBuildSendRequestArguments, defaultJqueryBuildSendRequestArguments } from "./defaults";
-import { BaseOptionsNormalizer } from './baseOptionsNormalizer'
-import { OptionsNormalizer } from "./optionsNormalizer";
-import { getEntityUrl, triggerOnEntity } from "./utils";
+import { 
+    defaultBackboneBuildSendRequestArguments, 
+    defaultJqueryBuildSendRequestArguments 
+} from "./defaults.js";
+import { BaseOptionsNormalizer } from './baseOptionsNormalizer.js'
+import { OptionsNormalizer } from "./optionsNormalizer.js";
+import { getEntityUrl, triggerOnEntity } from "./utils.js";
 
 // sendOptions = {
 //     url: String,
