@@ -19,9 +19,15 @@ export function getEntityUrl(entity) {
 }
 
 export function triggerOnEntity(entity, event, ...args) {
+
     if (!entity) { return; }
-    let method = entity.triggerMethod || entity.trigger;
-    if (method) {
-        method.call(entity, event, ...args);
+
+    if (typeof entity.triggerMethod === 'function') {
+
+        entity.triggerMethod(event, ...args);
+
+    } else if (typeof entity.trigger === 'function') {
+        
+        entity.trigger(event, ...args);
     }
 }
