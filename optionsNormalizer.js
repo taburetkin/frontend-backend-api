@@ -1,4 +1,4 @@
-import { withBodyArguments, withoutBodyArguments } from "./normalizeUtils.js";
+import { normalize, withBodyArguments, withoutBodyArguments } from "./normalizeUtils.js";
 import { isAbsoluteUrl } from "./utils.js";
 
 
