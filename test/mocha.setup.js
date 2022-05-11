@@ -21,9 +21,9 @@ global.expect = chai.expect;
 global.sinon = sinon;
 
 beforeEach(function() {
-    this.sinon = sinon.createSandbox();
+    global.sandbox = sinon.createSandbox();
 });
-  
+
 afterEach(function() {
-    this.sinon.restore();
+    global.sandbox.restore();
 });

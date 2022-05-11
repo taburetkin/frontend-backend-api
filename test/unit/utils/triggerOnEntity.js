@@ -15,8 +15,8 @@ describe('utils', () => {
             let trigger;
             let triggerMethod;
             beforeEach(() => {
-                trigger = sinon.spy();
-                triggerMethod = sinon.spy();
+                trigger = sandbox.spy();
+                triggerMethod = sandbox.spy();
             });
             it('should call triggerMethod at first if it exist', () => {
                 let entity = { trigger, triggerMethod };

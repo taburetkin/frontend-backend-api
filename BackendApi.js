@@ -2,7 +2,6 @@ import {
     defaultBackboneBuildSendRequestArguments, 
     defaultJqueryBuildSendRequestArguments 
 } from "./defaults.js";
-import { BaseOptionsNormalizer } from './baseOptionsNormalizer.js'
 import { OptionsNormalizer } from "./optionsNormalizer.js";
 import { getEntityUrl, triggerOnEntity } from "./utils.js";
 
@@ -21,7 +20,8 @@ class BackendApi {
 
     constructor(options = {}) {
 
-        this.headers = options.headers || defaultHeaders;
+        this.headers = this.setHeaders(options.headers || defaultHeaders, true);
+
         if (options.sync) {
             this.defaultSync = options.sync.bind(this);
         }
@@ -224,9 +224,9 @@ class BackendApi {
         if (headers === null) {
             replace = true;
         }
-        headers || (headers = {});
+
         if (replace) {
-            this.headers = headers;
+            this.headers = Object.assign({}, headers);
         } else {
             Object.assign(this.headers, headers);
         }
@@ -271,6 +271,5 @@ class BackendApi {
 
 export {
     BackendApi,
-    OptionsNormalizer,
-    BaseOptionsNormalizer
+    OptionsNormalizer
 }

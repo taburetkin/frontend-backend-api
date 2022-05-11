@@ -192,3 +192,20 @@ export const withBodyArguments = [
     }
 
 ];
+
+
+export function normalize(argumentsParsersArray, options, args, context = {}) {
+
+    const len = args.length < argumentsParsersArray.length 
+        ? args.length 
+        : argumentsParsersArray.length;
+
+    for (let index = 0; index < len; index++) {
+        let callback = argumentsParsersArray[index];
+        let arg = args[index];
+        callback(arg, options, context);
+    }
+
+
+    return options;
+}

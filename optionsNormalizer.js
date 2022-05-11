@@ -1,10 +1,8 @@
-import { BaseOptionsNormalizer } from "./baseOptionsNormalizer.js";
-import { BodyOptionsNormalizer } from "./bodyOptionsNormalizer.js";
 import { withBodyArguments, withoutBodyArguments } from "./normalizeUtils.js";
 import { isAbsoluteUrl } from "./utils.js";
 
 
-const methodsMapping = {
+const defaultMethodsMapping = {
     get: 'withoutBody',
     delete: 'withoutBody',
     post: 'withBody',
@@ -12,27 +10,32 @@ const methodsMapping = {
     put: 'withBody',
 }
 
-export class OptionsNormalizer extends BaseOptionsNormalizer {
+export class OptionsNormalizer {
 
     constructor(options) {
-        super();
-        this.methodsMapping = { ...methodsMapping };
-        this.withBody = this._buildWithBodyOptionsNormalizer(options); 
-        this.withoutBody = this._buildWithoutBodyOptionsNormalizer(options);
+        options = Object.assign({ withBodyArguments, withoutBodyArguments, defaultMethodsMapping }, options)
         this.initialize(options);
     }
-
-    _buildWithBodyOptionsNormalizer() {
-        return new BodyOptionsNormalizer(withBodyArguments);
+    
+    initialize(options) {
+        let { withBodyArguments, withoutBodyArguments, methodsMapping } = options;
+        this.methodsMapping = { ...methodsMapping };
+        this.withBody = normalize.bind(this, withBodyArguments); 
+        this.withoutBody = normalize.bind(this, withoutBodyArguments); 
     }
 
-    _buildWithoutBodyOptionsNormalizer() {
-        return new BodyOptionsNormalizer(withoutBodyArguments);
-    }
 
     normalize(httpMethod, args, context) {
+
+        if (!Array.isArray(args) || !args.length) {
+            throw new Error('call signature mismatched');
+        }
+
+        let options = { method: httpMethod.toUpperCase() };
+        
         let normalizeMethod = this.methodsMapping[httpMethod];
-        let options = this[normalizeMethod].normalize(httpMethod, args, context);
+
+        options = this[normalizeMethod](options, args, context);
 
         let { url, sync, entity } = options;
 

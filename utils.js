@@ -6,6 +6,7 @@ export function invokeValue(value, context, ...args) {
 }
 
 export function invokeProperty(obj, key, ...args) {
+    if (obj == null) { return; }
     return invokeValue(obj[key], obj, ...args);
 }
 
@@ -13,9 +14,8 @@ export function isAbsoluteUrl(url) {
     return /^https*\:\/\//g.test(url);
 }
 
-export function getEntityUrl(entity) {
-    if (!entity) { return; }
-    return invokeProperty(entity, 'url');
+export function getEntityUrl(entity, ...args) {
+    return invokeProperty(entity, 'url', ...args);
 }
 
 export function triggerOnEntity(entity, event, ...args) {
@@ -27,7 +27,7 @@ export function triggerOnEntity(entity, event, ...args) {
         entity.triggerMethod(event, ...args);
 
     } else if (typeof entity.trigger === 'function') {
-        
+
         entity.trigger(event, ...args);
     }
 }
