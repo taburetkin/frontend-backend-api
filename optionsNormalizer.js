@@ -13,7 +13,7 @@ const defaultMethodsMapping = {
 export class OptionsNormalizer {
 
     constructor(options) {
-        options = Object.assign({ withBodyArguments, withoutBodyArguments, defaultMethodsMapping }, options)
+        options = Object.assign({ withBodyArguments, withoutBodyArguments, methodsMapping: defaultMethodsMapping }, options);
         this.initialize(options);
     }
     
@@ -34,14 +34,10 @@ export class OptionsNormalizer {
         let options = { method: httpMethod.toUpperCase() };
         
         let normalizeMethod = this.methodsMapping[httpMethod];
-
+        
         options = this[normalizeMethod](options, args, context);
 
         let { url, sync, entity } = options;
-
-        if (!url && !entity) {
-            throw new Error('url or entity must be provided to perform a request');
-        }
 
         if (!url && !sync) {
             options.useDefaultSync = true;

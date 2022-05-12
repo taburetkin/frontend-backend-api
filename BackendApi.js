@@ -16,6 +16,17 @@ const defaultHeaders = {
     'Content-Type': 'application/json; charset=UTF-8' 
 };
 
+
+// const constructorOptions = {
+//     optionsNormalizer: Normalized,
+//     headers: Object,
+//     sync: Function,
+//     jquerySend: Function, // must be $.ajax
+//     backboneSend: Function, // must be Backbone.sync
+//     sendRequest: Function, // own implementation
+//     buildSendRequestArguments: Function, // own implementation
+// }
+
 class BackendApi {
 
     constructor(options = {}) {
@@ -102,6 +113,7 @@ class BackendApi {
 
 
     _send(method, args) {
+        args = Array.from(args);
         let options = this.normalizeOptions(method, args);
         return this.send(options);
     }
@@ -111,6 +123,7 @@ class BackendApi {
         options = this.populateSendOptions(options);
         return options;
     }
+
     populateSendOptions(options, method, args) {
         if (!options.sync && options.useDefaultSync) {
             options.sync = this.defaultSync;
@@ -135,11 +148,39 @@ class BackendApi {
     // get(entity, options) => Promise<entity>, sync by default if no additional url otherwise not syncing
     // get(entity, syncFn) => Promise<entity>
     // get(entity, 'add/url', syncFn)
+    // get(entity, 'add/url', syncFn, options)
+    // signatures:
+    // get(
+    //  entity | url, 
+    //  url | options | syncFn, 
+    //  options | syncFn,
+    //  options
+    // )
+    // differences by first argument:
+    // when first is url
+    // get(
+    //  url, 
+    //  options | syncFn, 
+    //  options,
+    // )
+    // when first is entity
+    // get(
+    //  entity, 
+    //  url | options | syncFn, 
+    //  options | syncFn, 
+    //  options,
+    // )
     get() {
         return this._send('get', arguments);
     }
 
     // delete has the same signatures like the get method.
+    // delete(
+    //  entity | url, 
+    //  url | options | syncFn, 
+    //  options | syncFn,
+    //  options
+    // )    
     delete() { 
         return this._send('delete', arguments);
     }
@@ -172,6 +213,28 @@ class BackendApi {
     // post(entity, 'add/url', jsonData, options) => Promise<entity>, sync by default if no additional url otherwise not syncing
     // post(entity, 'add/url', jsonData, syncFn) => Promise<entity>, sync by default if no additional url otherwise not syncing
     // post(entity, 'add/url', jsonData, syncFn, options) => Promise<entity>, sync by default if no additional url otherwise not syncing
+    // post(
+    //  entity | url, 
+    //  url | body | syncFn, 
+    //  options | body | syncFn,
+    //  options | syncFn,
+    //  options
+    // )
+    // when first is url:
+    // post(
+    //  url, 
+    //  body | syncFn, 
+    //  options | syncFn,
+    //  options
+    // )
+    // when first is entity:
+    // post(
+    //  entity, 
+    //  url | body | syncFn, 
+    //  options | body | syncFn,
+    //  options | syncFn,
+    //  options
+    // )    
     post() {
         return this._send('post', arguments);
     }

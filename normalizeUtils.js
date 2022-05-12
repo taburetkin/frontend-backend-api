@@ -11,6 +11,10 @@ function setSecondUrl(url, options, context, error) {
 }
 
 function setOptions(providedOptions, options, context) {
+    if (context.options) {
+        throw new Error('argument exception: options was already provided');
+    }
+    context.options = true;
     Object.assign(options, providedOptions);
 }
 
@@ -19,6 +23,10 @@ function setEntity(entity, options, context) {
 }
 
 function setSync(sync, options, context) {
+    if (context.sync) {
+        throw new Error('argument exception: sync callback was already provided');
+    }
+    context.sync = true;
     options.sync = sync;
 }
 
@@ -29,13 +37,15 @@ function setData(attrs, options, context) {
 
 
 function normalizeFirst(arg, options, context, withoutBody) {
-    let urlFirst = typeof arg === 'string';
-    if (urlFirst) {
-        setFirstUrl(arg, options, context);
-    } else {
-        setEntity(arg, options, context);
-    }
+    let type = typeof arg;
     context.withoutBody = withoutBody;
+    if (type === 'string') {
+        setFirstUrl(arg, options, context);
+    } else if (arg && type === 'object'){
+        setEntity(arg, options, context);
+    } else {
+        throw new Error('first argument must be a string or an object');
+    }
 }
 
 
@@ -81,7 +91,7 @@ export const withoutBodyArguments = [
 
     // first argument must be an url string or entity object
     (arg, options, context) => {
-
+        
         normalizeFirst(arg, options, context, true);
 
     },
@@ -95,9 +105,12 @@ export const withoutBodyArguments = [
 
             setSync(arg, options, context);
 
-        } else {
+        } else if (arg && type === 'object') {
             setOptions(arg, options, context);
+        } else {
+            throw new Error('second argument type mismatched');
         }
+
     },
 
     // third argument can be: options object or sync function
@@ -157,8 +170,10 @@ export const withBodyArguments = [
 
             setSync(arg, options, context);
 
-        } else {
+        } else if (arg && type === 'object') {
             setData(arg, options, context);
+        } else {
+            throw new Error('second argument type mismatched');
         }
     },
 
@@ -170,10 +185,14 @@ export const withBodyArguments = [
             setSync(arg, options, context);
         } else {
             if (arg && type === 'object') {
-                if (context.data) {
+                if (context.data || context.sync) {
                     setOptions(arg, options, context);
                 } else {
-                    setData(arg, options, context);
+                    if (!context.sync) {
+                        setData(arg, options, context);
+                    } else {
+                        throw new Error('data argument must go as second argument, before sync callback')
+                    }
                 }
             } else {
                 throw new Error('wrong third argument: expected options object, sync function or json data object');
@@ -199,7 +218,7 @@ export function normalize(argumentsParsersArray, options, args, context = {}) {
     const len = args.length < argumentsParsersArray.length 
         ? args.length 
         : argumentsParsersArray.length;
-
+    
     for (let index = 0; index < len; index++) {
         let callback = argumentsParsersArray[index];
         let arg = args[index];
