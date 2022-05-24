@@ -113,12 +113,12 @@ class BackendApi {
 
 
     _send(method, args) {
-        args = Array.from(args);
         let options = this.normalizeOptions(method, args);
         return this.send(options);
     }
 
     normalizeOptions(method, args, context = {}) {
+        args = Array.from(args);
         let options = this.optionsNormalizer.normalize(method, args, context);
         options = this.populateSendOptions(options);
         return options;
